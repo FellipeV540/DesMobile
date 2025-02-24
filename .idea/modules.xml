@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/DesMobile.iml" filepath="$PROJECT_DIR$/.idea/DesMobile.iml" />
+      <module fileurl="file://$PROJECT_DIR$/alomundo/alomundo.iml" filepath="$PROJECT_DIR$/alomundo/alomundo.iml" />
+      <module fileurl="file://$PROJECT_DIR$/cadastroalunos/cadastroalunos.iml" filepath="$PROJECT_DIR$/cadastroalunos/cadastroalunos.iml" />
+      <module fileurl="file://$PROJECT_DIR$/eranca/eranca.iml" filepath="$PROJECT_DIR$/eranca/eranca.iml" />
+      <module fileurl="file://$PROJECT_DIR$/heranca/heranca.iml" filepath="$PROJECT_DIR$/heranca/heranca.iml" />
+      <module fileurl="file://$PROJECT_DIR$/professor-aluno/professor-aluno.iml" filepath="$PROJECT_DIR$/professor-aluno/professor-aluno.iml" />
+      <module fileurl="file://$PROJECT_DIR$/veiculo/veiculo.iml" filepath="$PROJECT_DIR$/veiculo/veiculo.iml" />
+    </modules>
+  </component>
+</project>
