@@ -9,9 +9,13 @@ public class Programa {
         Estudante estudante3 = new Estudante("Andre", 7, 2, 3);
         Estudante estudante4 = new Estudante("Abdu", 5, 5, 9);
 
+        System.out.println(estudante1.getNome());
         System.out.println(estudante1.aprovado());
+        System.out.println(estudante2.getNome());
         System.out.println(estudante2.aprovado());
+        System.out.println(estudante3.getNome());
         System.out.println(estudante3.aprovado());
+        System.out.println(estudante4.getNome());
         System.out.println(estudante4.aprovado());
     }
 }

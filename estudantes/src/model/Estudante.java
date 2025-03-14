@@ -1,10 +1,10 @@
 package model;
 
-public class Estudante {
+public final class Estudante {
     /**
      *
      */
-    private String nome;
+    private final String nome;
     /**
      *
      */
@@ -17,58 +17,67 @@ public class Estudante {
      *
      */
     private int as;
+
     /**
      *
      */
-    private final int media = 7;
+    private static final int MEDIA = 7;
+    /**
+     *
+     */
+    private static final String APROVADO = "Aprovado";
+    /**
+     *
+     */
+    private static final String REPROVADO = "Reprovado";
+
+    /**
+     *
+     * @return nome.
+     */
+    public String getNome() {
+        return this.nome;
+    }
 
     /**
      *
      * @param name
      * @param nota1
      * @param nota2
-     * @param notaS constructor
+     * @param notaS
      */
     public Estudante(final String name, final int nota1,
                      final int nota2, final int notaS) {
+        this.nome = name;
         this.ap1 = nota1;
         this.ap2 = nota2;
         this.as = notaS;
-        this.nome = name;
+    }
 
+    private boolean calcularMedia(final int n1, final  int n2) {
+        return (n1 + n2) / 2 >= MEDIA;
     }
 
     /**
      *
-     * @return se o aluno é aprovado ou nao
+     * @return se foi aprovado ou não.
      */
     public String aprovado() {
-        if ((ap1 + ap2) / 2 >= media) {
-            return "Aprovado";
-        } else if (ap1 < ap2 && as > ap1) {
-            ap1 = as;
-            if ((ap1 + ap2) / 2 >= media) {
-                return "Aprovado";
-            } else {
-                return "Reprovado";
-            }
-        } else if (ap2 < ap1 && as > ap2) {
-            ap2 = as;
-            if ((ap1 + ap2) / 2 >= media) {
-                return "Aprovado";
-            } else {
-                return "Reprovado";
-            }
-        } else if (ap1 == ap2 &&  ap1 < as) {
-            ap1 = as;
-            if ((ap1 + ap2) / 2 >= media) {
-                return "Aprovado";
-            } else {
-                return "Reprovado";
+        if (calcularMedia(ap1, ap2)) {
+            return APROVADO;
+        }
+
+
+        if (ap1 < ap2) {
+            if (as > ap1) {
+                ap1 = as;
             }
         } else {
-            return "Reprovado";
+            if (as > ap2) {
+                ap2 = as;
+            }
         }
-    };
 
+        return calcularMedia(ap1, ap2) ? APROVADO : REPROVADO;
+    }
 }
