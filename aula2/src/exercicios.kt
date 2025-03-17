@@ -55,6 +55,39 @@ fun main() {
     var compras:MutableList <String> = mutableListOf("Maça", "Banana", "Uva")
     compras.add("Morango")
     compras.remove("Banana")
-    compras.replaceAll()
+    compras.set(2, "Pera")
     println(compras)
+
+    //exec8
+    println()
+    println("exec8")
+    var numerosAleatorios:MutableList <Int> = mutableListOf(5, 4, 1, 3, 8, 6)
+    var n = numerosAleatorios.size
+    for (i in 0 until n - 1) {
+    	for (j in 0 until n - i - 1) {
+        	if (numerosAleatorios[j] > numerosAleatorios[j+1]) {
+            	var temp = numerosAleatorios[j]
+            	temp = numerosAleatorios[j]
+            	numerosAleatorios[j] = numerosAleatorios[j+1]
+            	numerosAleatorios[j+1] = temp
+        	}
+    	}
+	}
+    println(numerosAleatorios)
+
+    //exec9
+    println()
+    println("exec9")
+    var alunos:MutableList <String> = mutableListOf("Rai", "Andre", "jpabu")
+    alunos.forEach{
+        println(it)
+    }
+
+    //exec10
+    println()
+    println("exec10")
+    var numRepetido:MutableList <Int> = mutableListOf(2, 2, 2, 2, 3, 6, 3)
+    var n = numRepetido.size
+    var numSemRepetido = numRepetido.toSet()
+    println(numSemRepetido)
 }
