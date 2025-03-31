@@ -62,9 +62,9 @@ fun main() {
     println()
     println("exec8")
     var numerosAleatorios:MutableList <Int> = mutableListOf(5, 4, 1, 3, 8, 6)
-    var n = numerosAleatorios.size
-    for (i in 0 until n - 1) {
-    	for (j in 0 until n - i - 1) {
+    var n1 = numerosAleatorios.size
+    for (i in 0 until n1 - 1) {
+    	for (j in 0 until n1 - i - 1) {
         	if (numerosAleatorios[j] > numerosAleatorios[j+1]) {
             	var temp = numerosAleatorios[j]
             	temp = numerosAleatorios[j]
@@ -87,7 +87,7 @@ fun main() {
     println()
     println("exec10")
     var numRepetido:MutableList <Int> = mutableListOf(2, 2, 2, 2, 3, 6, 3)
-    var n = numRepetido.size
+    var n2 = numRepetido.size
     var numSemRepetido = numRepetido.toSet()
     println(numSemRepetido)
 }
