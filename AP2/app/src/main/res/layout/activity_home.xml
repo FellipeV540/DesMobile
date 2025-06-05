@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".HomeActivity"
+    android:background="#242424">
+
+    <FrameLayout
+        android:id="@+id/balance_frame"
+        android:layout_width="325dp"
+        android:layout_height="147dp"
+        android:layout_marginTop="148dp"
+        android:background="@drawable/balance_background"
+        android:padding="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tvSaldo"
+                android:layout_width="260dp"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:paddingTop="20sp"
+                android:text="R$ 0,00"
+                android:textAlignment="textStart"
+                android:textColor="@android:color/white"
+                android:textSize="24sp" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/btnSend"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="8dp"
+                    android:backgroundTint="#953C19"
+                    android:backgroundTintMode="add"
+                    android:text="Enviar"
+                    android:textColor="#FFFFFF" />
+
+                <Button
+                    android:id="@+id/btnReceive"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:backgroundTint="#953C19"
+                    android:backgroundTintMode="add"
+                    android:text="Receber"
+                    android:textColor="#FFFFFF" />
+
+            </LinearLayout>
+        </LinearLayout>
+    </FrameLayout>
+
+    <TextView
+        android:id="@+id/tvBemVindo"
+        android:layout_width="204dp"
+        android:layout_height="76dp"
+        android:paddingTop="15sp"
+        android:text="Olá, seja bem vindo(a) nome"
+        android:textColor="#FFFFFF"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toTopOf="@+id/balance_frame"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.125"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.704" />
+
+    <FrameLayout
+        android:id="@+id/bottom_navigation_container"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <Button
+        android:id="@+id/bt_logout"
+        android:layout_width="97dp"
+        android:layout_height="41dp"
+        android:backgroundTint="#953C19"
+        android:text="Logout"
+        android:textColor="#FFFFFF"
+        app:layout_constraintBottom_toTopOf="@+id/balance_frame"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.488"
+        app:layout_constraintStart_toEndOf="@+id/tvBemVindo"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.699" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+
