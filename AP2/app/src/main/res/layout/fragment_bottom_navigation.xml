@@ -1,9 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.google.android.material.bottomnavigation.BottomNavigationView xmlns:android="http://schemas.android.com/apk/res/android"
+<com.google.android.material.bottomnavigation.BottomNavigationView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/bottom_navigation_view"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_gravity="bottom"
-    app:menu="@menu/bottom_nav_menu"
-    app:labelVisibilityMode="labeled" /> <!-- Shows labels for all items -->
+    android:background="#333333"
+
+    app:itemIconTint="@color/bottom_nav_item_tint"
+    app:itemTextColor="@color/bottom_nav_item_tint"
+
+    app:itemRippleColor="#953C19"
+    app:backgroundTint="#333333"
+
+    app:labelVisibilityMode="labeled"
+    app:menu="@menu/bottom_nav_menu" />

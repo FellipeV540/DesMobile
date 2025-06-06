@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#242424"
+    android:padding="16dp"
+    tools:context=".InvestorProfileActivity">
+
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/toolbar_investor_profile"
+        android:layout_width="0dp"
+        android:layout_height="?attr/actionBarSize"
+        android:background="#953C19"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:navigationIcon="@drawable/ic_arrow_back"
+        app:title="Perfil de Investidor"
+        app:titleTextColor="@android:color/white" />
+
+    <TextView
+        android:id="@+id/tvProfileQuestion"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Selecione qual opção se parece mais com você:"
+        android:textSize="18sp"
+        android:textColor="@android:color/white"
+        android:layout_marginTop="24dp"
+        app:layout_constraintTop_toBottomOf="@id/toolbar_investor_profile"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <RadioGroup
+        android:id="@+id/rgInvestorTypes"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        app:layout_constraintTop_toBottomOf="@id/tvProfileQuestion"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <RadioButton
+            android:id="@+id/rbOptionConservative"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Prefiro segurança, mesmo que os retornos sejam menores. (Conservador)"
+            android:textColor="@android:color/white"
+            android:buttonTint="@android:color/white"
+            android:paddingStart="8dp"
+            android:paddingEnd="8dp"/>
+
+        <RadioButton
+            android:id="@+id/rbOptionModerate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="Busco um equilíbrio entre segurança e rentabilidade. (Moderado)"
+            android:textColor="@android:color/white"
+            android:buttonTint="@android:color/white"
+            android:paddingStart="8dp"
+            android:paddingEnd="8dp"/>
+
+        <RadioButton
+            android:id="@+id/rbOptionAggressive"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="Aceito mais riscos em busca de maiores retornos. (Arrojado)"
+            android:textColor="@android:color/white"
+            android:buttonTint="@android:color/white"
+            android:paddingStart="8dp"
+            android:paddingEnd="8dp"/>
+    </RadioGroup>
+
+    <Button
+        android:id="@+id/btnSubmitProfile"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:backgroundTint="#953C19"
+        android:text="Enviar"
+        android:textColor="#FFFFFF"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/rgInvestorTypes"
+        app:layout_constraintWidth_percent="0.8" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

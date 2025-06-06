@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Color when item is selected (to be visible ON #953C19 background) -->
+    <item android:state_checked="true" android:color="#FFFFFF" /> <!-- White text/icon -->
+
+    <!-- Default color for unselected items (visible on your #333333 BottomNav background) -->
+    <item android:color="#AAAAAA" /> <!-- Light Gray for unselected text/icon -->
+</selector>
