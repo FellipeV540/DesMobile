@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Color when RadioButton is checked -->
+    <item android:state_checked="true" android:color="#953C19" /> <!-- YOUR_DESIRED_CHECKED_COLOR -->
+
+    <!-- Default color for RadioButton (unchecked state) -->
+    <item android:state_checked="false" android:color="#AAAAAA" /> <!-- YOUR_DESIRED_UNCHECKED_COLOR (e.g., a gray) -->
+
+    <!-- You can also add other states like disabled, focused, etc. if needed -->
+    <!-- <item android:state_enabled="false" android:color="#808080" /> -->
+</selector>
