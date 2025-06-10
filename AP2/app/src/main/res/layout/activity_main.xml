@@ -10,19 +10,19 @@
 
     <EditText
         android:id="@+id/etNome"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:backgroundTint="#00D12A2A"
+        android:layout_width="213dp"
+        android:layout_height="44dp"
+        android:background="@drawable/balance_background"
         android:ems="10"
         android:hint="Nome"
         android:inputType="text"
-        android:textColorHint="#FDFDFD"
+        android:paddingLeft="10sp"
+        android:textColorHint="#92FDFDFD"
         app:layout_constraintBottom_toTopOf="@+id/bt_entrar"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.949" />
+        app:layout_constraintVertical_bias="0.968" />
 
     <Button
         android:id="@+id/bt_entrar"

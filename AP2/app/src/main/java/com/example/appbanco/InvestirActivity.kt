@@ -191,8 +191,8 @@ class InvestirActivity : AppCompatActivity() {
                 textSize = 15f
                 setPadding(0, 8, 0, 8)
                 when (transaction.type) {
-                    InvestmentTransactionType.INVESTED -> setTextColor(ContextCompat.getColor(this@InvestirActivity, R.color.transaction_sent_red))
-                    InvestmentTransactionType.RETRIEVED -> setTextColor(ContextCompat.getColor(this@InvestirActivity, R.color.transaction_received_green))
+                    InvestmentTransactionType.INVESTED -> setTextColor(ContextCompat.getColor(this@InvestirActivity, R.color.transaction_invested_blue))
+                    InvestmentTransactionType.RETRIEVED -> setTextColor(ContextCompat.getColor(this@InvestirActivity, R.color.transaction_retrieved_purple))
                 }
             }
             llInvestmentTransactionHistory.addView(transactionView)
@@ -213,8 +213,8 @@ class InvestirActivity : AppCompatActivity() {
             textSize = 15f
             setPadding(0, 8, 0, 8)
             when (transaction.type) {
-                InvestmentTransactionType.INVESTED -> setTextColor(ContextCompat.getColor(this@InvestirActivity, R.color.transaction_sent_red))
-                InvestmentTransactionType.RETRIEVED -> setTextColor(ContextCompat.getColor(this@InvestirActivity, R.color.transaction_received_green))
+                InvestmentTransactionType.INVESTED -> setTextColor(ContextCompat.getColor(this@InvestirActivity, R.color.transaction_invested_blue))
+                InvestmentTransactionType.RETRIEVED -> setTextColor(ContextCompat.getColor(this@InvestirActivity, R.color.transaction_retrieved_purple))
             }
         }
         llInvestmentTransactionHistory.addView(transactionView, 0) // Add new one to the top
