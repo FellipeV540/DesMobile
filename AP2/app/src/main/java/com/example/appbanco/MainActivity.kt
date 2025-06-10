@@ -153,6 +153,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun navigateToHome() {
+        BalanceManager.resetAllUserData(this)
         val intent = Intent(this, HomeActivity::class.java)
         intent.putExtra("USER_NAME_EXTRA", userNameForAuth)
         startActivity(intent)

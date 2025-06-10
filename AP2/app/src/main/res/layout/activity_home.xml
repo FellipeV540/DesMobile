@@ -19,34 +19,38 @@
         android:text="Olá, seja bem vindo(a) nome"
         android:textColor="#FFFFFF"
         android:textSize="20sp"
+        app:layout_constraintBottom_toTopOf="@+id/balance_frame"
         app:layout_constraintEnd_toStartOf="@+id/bt_logout"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <!-- Transaction History Frame -->
 
     <Button
         android:id="@+id/bt_logout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="24dp"
+        android:layout_marginTop="52dp"
+        android:layout_marginEnd="32dp"
         android:backgroundTint="#953C19"
         android:text="Logout"
         android:textColor="#FFFFFF"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/tvBemVindo"
-        app:layout_constraintBottom_toBottomOf="@+id/tvBemVindo"/>
+        app:layout_constraintTop_toTopOf="parent" />
 
     <FrameLayout
         android:id="@+id/balance_frame"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="108dp"
         android:layout_marginEnd="32dp"
         android:background="@drawable/balance_background"
         android:padding="16dp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvBemVindo">
+        app:layout_constraintTop_toTopOf="parent">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -55,19 +59,27 @@
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/tvSaldo"
-                android:layout_width="match_parent"
+                android:id="@+id/tvSeuSaldo"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp"
-                android:paddingTop="20sp"
-                android:text="R$ 0,00"
-                android:textAlignment="textStart"
+                android:text="Seu Saldo"
                 android:textColor="@android:color/white"
-                android:textSize="24sp" />
+                android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/tvSaldo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="R$ 0,00"
+                android:textColor="@android:color/white"
+                android:textSize="28sp"
+                android:textStyle="bold" />
 
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
                 android:orientation="horizontal">
 
                 <Button
@@ -91,7 +103,6 @@
         </LinearLayout>
     </FrameLayout>
 
-    <!-- Transaction History Frame -->
     <TextView
         android:id="@+id/tvHistoryLabel"
         android:layout_width="wrap_content"

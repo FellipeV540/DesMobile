@@ -125,23 +125,21 @@ class HomeActivity : AppCompatActivity() {
         val builder = AlertDialog.Builder(this)
         builder.setTitle(title)
 
-        // Create an EditText input field
-        val input = EditText(this).apply { // <--- DECLARE AND INITIALIZE INPUT HERE
-            inputType = InputType.TYPE_CLASS_NUMBER or InputType.TYPE_NUMBER_FLAG_DECIMAL
-            gravity = Gravity.CENTER
-            // You might want to add some hint text
-            // hint = "0.00"
-        }
-
-        // Set the EditText as the view for the AlertDialog
+        val input = EditText(this)
+        input.inputType = InputType.TYPE_CLASS_NUMBER or InputType.TYPE_NUMBER_FLAG_DECIMAL
+        input.hint = "Digite o valor"
         builder.setView(input)
 
         builder.setPositiveButton("Confirmar") { dialog, _ ->
-            val amountText = input.text.toString() // Now 'input' is recognized
+            val amountText = input.text.toString()
             if (amountText.isNotEmpty()) {
                 try {
                     val amount = BigDecimal(amountText) // Use BigDecimal
-                    onConfirm(amount)
+                    if (amount > BigDecimal.ZERO) {
+                        onConfirm(amount)
+                    } else {
+                        Toast.makeText(this, "O valor deve ser positivo.", Toast.LENGTH_SHORT).show()
+                    }
                 } catch (e: NumberFormatException) {
                     Toast.makeText(this, "Valor inválido.", Toast.LENGTH_SHORT).show()
                 }
@@ -150,11 +148,7 @@ class HomeActivity : AppCompatActivity() {
             }
             dialog.dismiss()
         }
-
-        builder.setNegativeButton("Cancelar") { dialog, _ ->
-            dialog.cancel()
-        }
-
+        builder.setNegativeButton("Cancelar") { dialog, _ -> dialog.cancel() }
         builder.show()
     }
 
