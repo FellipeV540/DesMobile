@@ -15,63 +15,63 @@
         android:layout_marginTop="60dp"
         android:layout_marginEnd="32dp"
         android:background="@drawable/balance_background"
-    android:padding="16dp"
-    app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toTopOf="parent">
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center_horizontal"
-        android:orientation="vertical">
-
-        <TextView
-            android:id="@+id/tvInvestedBalanceLabel"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Total Investido"
-            android:textColor="@android:color/white"
-            android:textSize="18sp" />
-
-        <TextView
-            android:id="@+id/tvInvestedBalance"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:text="R$ 0,00"
-            android:textColor="@android:color/white"
-            android:textSize="28sp"
-            android:textStyle="bold" />
+        android:padding="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:orientation="horizontal">
+            android:gravity="center_horizontal"
+            android:orientation="vertical">
 
-            <Button
-                android:id="@+id/btnInvest"
+            <TextView
+                android:id="@+id/tvInvestedBalanceLabel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="8dp"
-                android:backgroundTint="#953C19"
-                android:text="Investir"
-                android:textColor="#FFFFFF" />
+                android:text="Total Investido"
+                android:textColor="@android:color/white"
+                android:textSize="18sp" />
 
-            <Button
-                android:id="@+id/btnRetrieve"
+            <TextView
+                android:id="@+id/tvInvestedBalance"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:backgroundTint="#953C19"
-                android:text="Resgatar"
-                android:textColor="#FFFFFF" />
+                android:layout_marginTop="8dp"
+                android:text="R$ 0,00"
+                android:textColor="@android:color/white"
+                android:textSize="28sp"
+                android:textStyle="bold" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/btnInvest"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="8dp"
+                    android:backgroundTint="#953C19"
+                    android:text="Investir"
+                    android:textColor="#FFFFFF" />
+
+                <Button
+                    android:id="@+id/btnRetrieve"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:backgroundTint="#953C19"
+                    android:text="Resgatar"
+                    android:textColor="#FFFFFF" />
+            </LinearLayout>
         </LinearLayout>
-    </LinearLayout>
-</FrameLayout>
+    </FrameLayout>
 
-    <!-- Investor Type Text -->
+    <!-- Investor Type Text (Keep this if you still use it) -->
     <TextView
         android:id="@+id/tvInvestorTypeLabel"
         android:layout_width="0dp"
@@ -79,7 +79,7 @@
         android:layout_marginStart="32dp"
         android:layout_marginTop="32dp"
         android:layout_marginEnd="32dp"
-        android:text="Seu tipo de investidor é ?*"
+        android:text="Seu tipo de investidor é ?"
         android:textAlignment="center"
         android:textColor="@android:color/white"
         android:textSize="18sp"
@@ -93,34 +93,62 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="8dp"
         android:layout_marginEnd="32dp"
         android:text="*Clique aqui para descobrir que tipo de investidor você é"
         android:textAllCaps="false"
         android:textColor="#FFC107"
-        android:textSize="16sp"
+        android:textSize="14sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tvInvestorTypeLabel" />
 
 
+    <!-- Investment Transaction History -->
+    <TextView
+        android:id="@+id/tvInvestmentHistoryLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Histórico de Investimentos"
+        android:textColor="@android:color/white"
+        android:textSize="16sp"
+        android:layout_marginTop="24dp"
+        app:layout_constraintTop_toBottomOf="@id/btnDiscoverInvestorType"
+        app:layout_constraintStart_toStartOf="@id/investment_balance_frame" />
 
-<View
-android:id="@+id/spacer"
-android:layout_width="0dp"
-android:layout_height="0dp"
-app:layout_constraintTop_toBottomOf="@id/btnDiscoverInvestorType"
-app:layout_constraintBottom_toTopOf="@+id/bottom_navigation_container"
-app:layout_constraintStart_toStartOf="parent"
-app:layout_constraintEnd_toEndOf="parent"
-android:layout_marginBottom="16dp"/>
+    <androidx.cardview.widget.CardView
+        android:id="@+id/investment_history_frame"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        app:cardBackgroundColor="#404040"
+        app:cardCornerRadius="8dp"
+        app:layout_constraintTop_toBottomOf="@id/tvInvestmentHistoryLabel"
+        app:layout_constraintStart_toStartOf="@id/investment_balance_frame"
+        app:layout_constraintEnd_toEndOf="@id/investment_balance_frame"
+        app:layout_constraintBottom_toTopOf="@id/bottom_navigation_container_invest">
 
-<FrameLayout
-android:id="@+id/bottom_navigation_container"
-android:layout_width="0dp"
-android:layout_height="wrap_content"
-app:layout_constraintBottom_toBottomOf="parent"
-app:layout_constraintEnd_toEndOf="parent"
-app:layout_constraintStart_toStartOf="parent" />
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="12dp">
+
+            <LinearLayout
+                android:id="@+id/llInvestmentTransactionHistory"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical" />
+        </ScrollView>
+    </androidx.cardview.widget.CardView>
+
+
+    <FrameLayout
+        android:id="@+id/bottom_navigation_container_invest"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

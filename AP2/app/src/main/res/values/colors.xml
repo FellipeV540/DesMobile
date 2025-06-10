@@ -2,4 +2,9 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <!-- ... other colors ... -->
+    <color name="transaction_sent_red">#FF6B6B</color> <!-- A softer red -->
+    <color name="transaction_received_green">#81C784</color> <!-- A softer green -->
+    <color name="transaction_invested_blue">#64B5F6</color> <!-- A softer blue -->
+    <color name="transaction_retrieved_purple">#BA68C8</color> <!-- A softer purple -->
 </resources>

@@ -1,125 +1,257 @@
-package com.example.appbanco
+package com.example.appbanco // Your package
 
+import android.graphics.Color
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.text.InputType
 import android.widget.Button
+import android.widget.EditText
+import android.widget.LinearLayout
+import android.widget.ScrollView
 import android.widget.TextView
-import androidx.activity.enableEdgeToEdge
-import androidx.activity.result.ActivityResultLauncher
-import androidx.activity.result.contract.ActivityResultContracts
-//import androidx.activity.result.launch
+import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-//import androidx.compose.ui.semantics.text
-//import androidx.compose.ui.semantics.text
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
-import com.example.appbanco.BottomNavigationFragment
+import androidx.core.content.ContextCompat
+import java.math.BigDecimal // Use BigDecimal
+import java.text.NumberFormat
+import java.util.Locale
+
+// You can reuse Transaction and TransactionType or create specific ones if needed
+// For this example, let's add new types for investment
+enum class InvestmentTransactionType { INVESTED, RETRIEVED }
+data class InvestmentTransaction(val message: String, val type: InvestmentTransactionType)
+
 
 class InvestirActivity : AppCompatActivity() {
 
     private lateinit var tvInvestedBalance: TextView
     private lateinit var btnInvest: Button
     private lateinit var btnRetrieve: Button
-    private lateinit var tvInvestorTypeLabel: TextView
+    private lateinit var llInvestmentTransactionHistory: LinearLayout
     private lateinit var btnDiscoverInvestorType: Button
+    private lateinit var tvInvestorTypeLabel: TextView
 
-    private var currentInvestorType: String? = null
-    private var hasTakenInvestorTest: Boolean = false // Flag to track if test was taken
+    private val currencyFormat: NumberFormat = NumberFormat.getCurrencyInstance(Locale("pt", "BR"))
+    private val MAX_DISPLAY_INVESTMENT_HISTORY_ITEMS = 20
 
-    // ActivityResultLauncher for getting the result from InvestorProfileActivity
-    private lateinit var investorProfileLauncher: ActivityResultLauncher<Intent>
-
-    // Define keys for saving instance state
-    companion object {
-        private const val KEY_INVESTOR_TYPE = "investor_type"
-        private const val KEY_HAS_TAKEN_TEST = "has_taken_test"
+    companion object { // Use a companion object for request codes and intent extras
+        private const val REQUEST_CODE_INVESTOR_PROFILE = 101
+        const val EXTRA_INVESTOR_TYPE = "com.example.appbanco.EXTRA_INVESTOR_TYPE" // For InvestorProfileActivity to send data back
+        private const val PREF_KEY_INVESTOR_TYPE = "savedInvestorType" // For SharedPreferences
     }
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_investir)
 
-        // Restore instance state
-        if (savedInstanceState != null) {
-            currentInvestorType = savedInstanceState.getString(KEY_INVESTOR_TYPE)
-            hasTakenInvestorTest = savedInstanceState.getBoolean(KEY_HAS_TAKEN_TEST, false)
-        }
-
-
         tvInvestedBalance = findViewById(R.id.tvInvestedBalance)
         btnInvest = findViewById(R.id.btnInvest)
         btnRetrieve = findViewById(R.id.btnRetrieve)
-        tvInvestorTypeLabel = findViewById(R.id.tvInvestorTypeLabel)
+        llInvestmentTransactionHistory = findViewById(R.id.llInvestmentTransactionHistory)
         btnDiscoverInvestorType = findViewById(R.id.btnDiscoverInvestorType)
+        tvInvestorTypeLabel = findViewById(R.id.tvInvestorTypeLabel)
 
-        // Initialize the ActivityResultLauncher
-        investorProfileLauncher = registerForActivityResult(
-            ActivityResultContracts.StartActivityForResult()
-        ) { result ->
-            if (result.resultCode == Activity.RESULT_OK) {
-                val data: Intent? = result.data
-                data?.getStringExtra(InvestorProfileActivity.EXTRA_INVESTOR_TYPE)?.let { type ->
-                    setInvestorType(type)
-                    hasTakenInvestorTest = true // Mark that test has been taken and submitted
-                    updateDiscoverButtonText()
+        updateInvestedBalanceDisplay()
+        loadAndDisplayInvestmentHistory() // Load and display any persisted history
+        loadAndDisplaySavedInvestorType()
+
+        btnInvest.setOnClickListener {
+            showInvestmentAmountDialog("Investir Dinheiro") { amountToInvest ->
+                val currentMainBalance = BalanceManager.getMainBalance(this)
+                if (amountToInvest > BigDecimal.ZERO && amountToInvest <= currentMainBalance) {
+                    if (BalanceManager.subtractFromMainBalance(this, amountToInvest)) {
+                        BalanceManager.addToInvestedBalance(this, amountToInvest)
+                        updateInvestedBalanceDisplay()
+
+                        // For Investment Screen History
+                        val investmentMessage = "Você investiu ${currencyFormat.format(amountToInvest)}"
+                        val investmentTx = InvestmentTransaction(investmentMessage, InvestmentTransactionType.INVESTED)
+                        BalanceManager.addTransactionToInvestmentHistoryStorage(this, investmentTx) // Save
+                        addInvestmentTransactionToDisplay(investmentTx) // Update UI
+
+                        // For Home Screen History (unified)
+                        val homeMessage = "Você investiu ${currencyFormat.format(amountToInvest)}"
+                        val homeTx = Transaction(homeMessage, TransactionType.INVESTED) // Use the expanded enum
+                        BalanceManager.addTransactionToHomeHistory(this, homeTx)
+
+                        Toast.makeText(this, "Investimento realizado!", Toast.LENGTH_SHORT).show()
+                    } else {
+                        // Should not happen if first check passes, but good for safety
+                        Toast.makeText(this, "Falha ao debitar da conta principal.", Toast.LENGTH_SHORT).show()
+                    }
+                } else if (amountToInvest > currentMainBalance) {
+                    Toast.makeText(this, "Saldo na conta principal insuficiente!", Toast.LENGTH_SHORT).show()
+                } else {
+                    Toast.makeText(this, "Valor de investimento inválido.", Toast.LENGTH_SHORT).show()
                 }
-            } else {
-                // Handle cancellation or other results if needed
-                // For example, if the user presses back without submitting
             }
         }
 
-        updateInvestorTypeLabel()
-        updateDiscoverButtonText()
+        btnRetrieve.setOnClickListener {
+            showInvestmentAmountDialog("Resgatar Investimento") { amountToRetrieve ->
+                val currentInvestedBalance = BalanceManager.getInvestedBalance(this)
+                if (amountToRetrieve > BigDecimal.ZERO && amountToRetrieve <= currentInvestedBalance) {
+                    if (BalanceManager.subtractFromInvestedBalance(this, amountToRetrieve)) {
+                        BalanceManager.addToMainBalance(this, amountToRetrieve)
+                        updateInvestedBalanceDisplay()
+
+                        // For Investment Screen History
+                        val investmentMessage = "Você resgatou ${currencyFormat.format(amountToRetrieve)} do investimento"
+                        val investmentTx = InvestmentTransaction(investmentMessage, InvestmentTransactionType.RETRIEVED)
+                        BalanceManager.addTransactionToInvestmentHistoryStorage(this, investmentTx) // Save
+                        addInvestmentTransactionToDisplay(investmentTx) // Update UI
+
+                        // For Home Screen History (unified)
+                        val homeMessage = "Você resgatou ${currencyFormat.format(amountToRetrieve)} do investimento"
+                        val homeTx = Transaction(homeMessage, TransactionType.RETRIEVED_INVESTMENT)
+                        BalanceManager.addTransactionToHomeHistory(this, homeTx)
+
+                        Toast.makeText(this, "Resgate realizado!", Toast.LENGTH_SHORT).show()
+                    } else {
+                        Toast.makeText(this, "Falha ao resgatar. Tente novamente.", Toast.LENGTH_SHORT).show()
+                    }
+                } else if (amountToRetrieve > currentInvestedBalance) {
+                    Toast.makeText(this, "Saldo investido insuficiente!", Toast.LENGTH_SHORT).show()
+                } else {
+                    Toast.makeText(this, "Valor de resgate inválido.", Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
 
         btnDiscoverInvestorType.setOnClickListener {
             val intent = Intent(this, InvestorProfileActivity::class.java)
-            investorProfileLauncher.launch(intent)
-            overridePendingTransition(0, 0) // Optional: no animation for launching
+            startActivityForResult(intent, REQUEST_CODE_INVESTOR_PROFILE) // <-- Start for result
         }
 
-        if (savedInstanceState == null && supportFragmentManager.findFragmentById(R.id.bottom_navigation_container) == null) {
+        // --- Load Bottom Navigation Fragment ---
+        if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction()
-                .replace(R.id.bottom_navigation_container, BottomNavigationFragment())
+                .replace(R.id.bottom_navigation_container_invest, BottomNavigationFragment()) // Use correct container ID
                 .commit()
         }
     }
 
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-        outState.putString(KEY_INVESTOR_TYPE, currentInvestorType)
-        outState.putBoolean(KEY_HAS_TAKEN_TEST, hasTakenInvestorTest)
-    }
-
-
-    private fun updateInvestorTypeLabel() {
-        if (currentInvestorType != null) {
-            tvInvestorTypeLabel.text = "Seu tipo de investidor é $currentInvestorType"
-        } else {
-            tvInvestorTypeLabel.text = "Seu tipo de investidor é ?"
-        }
-    }
-
-    private fun updateDiscoverButtonText() {
-        if (hasTakenInvestorTest) {
-            btnDiscoverInvestorType.text = "Clique aqui para refazer o teste de tipo de investidor"
-        } else {
-            btnDiscoverInvestorType.text = "Clique aqui para descobrir que tipo de investidor você é"
-        }
-    }
-
-    private fun setInvestorType(type: String) {
-        currentInvestorType = type
-        updateInvestorTypeLabel()
-    }
-
     override fun onResume() {
         super.onResume()
-        // Could also update texts here if data might change while activity is paused
-        // but ActivityResultLauncher is more direct for this specific flow.
-        updateInvestorTypeLabel()
-        updateDiscoverButtonText()
+        updateInvestedBalanceDisplay()
+        loadAndDisplayInvestmentHistory() // Reload from persistence
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if (requestCode == REQUEST_CODE_INVESTOR_PROFILE) {
+            if (resultCode == Activity.RESULT_OK) {
+                val investorType = data?.getStringExtra(EXTRA_INVESTOR_TYPE)
+                if (!investorType.isNullOrEmpty()) {
+                    tvInvestorTypeLabel.text = "Seu tipo de investidor é: $investorType"
+                    saveInvestorType(investorType) // Save the determined type
+                    Toast.makeText(this, "Perfil de investidor atualizado!", Toast.LENGTH_SHORT).show()
+                } else {
+                    tvInvestorTypeLabel.text = "Seu tipo de investidor é ?" // Reset or default
+                }
+            } else {
+                // Handle cancellation or failure if needed
+                // Toast.makeText(this, "Perfil não definido.", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
+    private fun saveInvestorType(investorType: String) {
+        // Using SharedPreferences directly here for simplicity for this specific item.
+        // You could also integrate this into BalanceManager if you prefer.
+        val sharedPrefs = getSharedPreferences("InvestirActivityPrefs", Context.MODE_PRIVATE)
+        sharedPrefs.edit().putString(PREF_KEY_INVESTOR_TYPE, investorType).apply()
+    }
+
+    private fun loadAndDisplaySavedInvestorType() {
+        val sharedPrefs = getSharedPreferences("InvestirActivityPrefs", Context.MODE_PRIVATE)
+        val savedType = sharedPrefs.getString(PREF_KEY_INVESTOR_TYPE, null)
+        if (!savedType.isNullOrEmpty()) {
+            tvInvestorTypeLabel.text = "Seu tipo de investidor é: $savedType"
+        } else {
+            tvInvestorTypeLabel.text = "Seu tipo de investidor é ?" // Default text
+        }
+    }
+
+    private fun updateInvestedBalanceDisplay() {
+        val investedBalance = BalanceManager.getInvestedBalance(this)
+        tvInvestedBalance.text = currencyFormat.format(investedBalance)
+    }
+
+    private fun loadAndDisplayInvestmentHistory() {
+        llInvestmentTransactionHistory.removeAllViews()
+        val history = BalanceManager.getInvestmentTransactionHistory(this)
+        history.take(MAX_DISPLAY_INVESTMENT_HISTORY_ITEMS).forEach { transaction ->
+            val transactionView = TextView(this).apply {
+                text = transaction.message
+                textSize = 15f
+                setPadding(0, 8, 0, 8)
+                when (transaction.type) {
+                    InvestmentTransactionType.INVESTED -> setTextColor(ContextCompat.getColor(this@InvestirActivity, R.color.transaction_sent_red))
+                    InvestmentTransactionType.RETRIEVED -> setTextColor(ContextCompat.getColor(this@InvestirActivity, R.color.transaction_received_green))
+                }
+            }
+            llInvestmentTransactionHistory.addView(transactionView)
+        }
+        (llInvestmentTransactionHistory.parent as? ScrollView)?.post {
+            (llInvestmentTransactionHistory.parent as ScrollView).fullScroll(ScrollView.FOCUS_UP)
+        }
+    }
+
+    private fun addInvestmentTransactionToDisplay(transaction: InvestmentTransaction) {
+        if (llInvestmentTransactionHistory.childCount >= MAX_DISPLAY_INVESTMENT_HISTORY_ITEMS) {
+            if (llInvestmentTransactionHistory.childCount > 0) {
+                llInvestmentTransactionHistory.removeViewAt(llInvestmentTransactionHistory.childCount - 1) // Remove oldest from display
+            }
+        }
+        val transactionView = TextView(this).apply {
+            text = transaction.message
+            textSize = 15f
+            setPadding(0, 8, 0, 8)
+            when (transaction.type) {
+                InvestmentTransactionType.INVESTED -> setTextColor(ContextCompat.getColor(this@InvestirActivity, R.color.transaction_sent_red))
+                InvestmentTransactionType.RETRIEVED -> setTextColor(ContextCompat.getColor(this@InvestirActivity, R.color.transaction_received_green))
+            }
+        }
+        llInvestmentTransactionHistory.addView(transactionView, 0) // Add new one to the top
+        (llInvestmentTransactionHistory.parent as? ScrollView)?.post {
+            (llInvestmentTransactionHistory.parent as ScrollView).fullScroll(ScrollView.FOCUS_UP)
+        }
+    }
+
+    // Dialog for getting investment/retrieval amount
+    private fun showInvestmentAmountDialog(title: String, onConfirm: (BigDecimal) -> Unit) {
+        val builder = AlertDialog.Builder(this)
+        builder.setTitle(title)
+
+        val input = EditText(this)
+        input.inputType = InputType.TYPE_CLASS_NUMBER or InputType.TYPE_NUMBER_FLAG_DECIMAL
+        input.hint = "Digite o valor"
+        builder.setView(input)
+
+        builder.setPositiveButton("Confirmar") { dialog, _ ->
+            val amountText = input.text.toString()
+            if (amountText.isNotEmpty()) {
+                try {
+                    val amount = BigDecimal(amountText) // Use BigDecimal
+                    if (amount > BigDecimal.ZERO) {
+                        onConfirm(amount)
+                    } else {
+                        Toast.makeText(this, "O valor deve ser positivo.", Toast.LENGTH_SHORT).show()
+                    }
+                } catch (e: NumberFormatException) {
+                    Toast.makeText(this, "Valor inválido.", Toast.LENGTH_SHORT).show()
+                }
+            } else {
+                Toast.makeText(this, "Por favor, insira um valor.", Toast.LENGTH_SHORT).show()
+            }
+            dialog.dismiss()
+        }
+        builder.setNegativeButton("Cancelar") { dialog, _ -> dialog.cancel() }
+        builder.show()
     }
 }
